@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Facebook, Twitter, Instagram, Mail } from "lucide-react";
 import { useState } from "react";
+import anhQR from "../../assets/nguyenlong.png";
 
 const Footer = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,30 +25,30 @@ const Footer = () => {
                 <Facebook className="h-5 w-5" onClick={handleinformation} />
               </p>
 
-              <a
+              <p
                 href="#"
                 className="text-gray-300 hover:text-white transition-colors"
               >
-                <Twitter className="h-5 w-5" />
-              </a>
-              <a
+                <Twitter className="h-5 w-5" onClick={handleinformation} />
+              </p>
+              <p
                 href="#"
                 className="text-gray-300 hover:text-white transition-colors"
               >
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a
+                <Instagram className="h-5 w-5" onClick={handleinformation} />
+              </p>
+              <p
                 href="#"
                 className="text-gray-300 hover:text-white transition-colors"
               >
-                <Mail className="h-5 w-5" />
-              </a>
+                <Mail className="h-5 w-5" onClick={handleinformation} />
+              </p>
             </div>
             {isOpen && (
               <div style={{ marginTop: "20px" }}>
                 <img
-                  src="C:\Users\nguye\OneDrive\Hình ảnh\Longphoto\nguyen long.png"
-                  alt="Hiển thị"
+                  src={anhQR}
+                  alt="QR code "
                   style={{ border: "1px solid #ccc", borderRadius: "8px" }}
                 />
               </div>
