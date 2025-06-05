@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, User, Search, Menu, X } from "lucide-react";
-import { useCart } from "../../context/CartContext";
+import { useCart } from "@context/CartContext";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,7 +19,7 @@ const Navbar = () => {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // Handle search functionality
+
     console.log("Searching for:", searchQuery);
   };
 
@@ -145,7 +145,7 @@ const Navbar = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <Search className="absolute left-6 top-4.5 h-5 w-5 text-gray-400" />
+            <Search className="absolute left-6 top-[20px] h-5 w-5 text-gray-400" />
           </form>
         </div>
       )}
