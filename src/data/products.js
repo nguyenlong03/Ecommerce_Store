@@ -144,6 +144,18 @@ export const allProducts = [
     discount: 8,
     createdAt: "2024-02-20T00:00:00.000Z",
   },
+    {
+    id: 13,
+    name: "Premium Wireless shirt",
+    price: 250000.0,
+    description: "áo thoáng mát vào mùa hè , mặc auto đẹp trai",
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwSCJSrQjIdce5UjM5WWswCWU9ivAalUvqKA&s",
+    category: "electronics",
+    rating: 4.9,
+    reviews: 105,
+    discount: 8,
+    createdAt: "2024-02-20T00:00:00.000Z",
+  },
 ];
 
 // Featured products (a subset of all products)

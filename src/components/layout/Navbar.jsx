@@ -2,12 +2,12 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, User, Search, Menu, X } from "lucide-react";
 import { useCart } from "@context/CartContext";
-
+import { useAuth } from "../../context/AuthContext";
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { cartItems } = useCart();
-
+  const { user } = useAuth();
   const totalItems = cartItems.reduce(
     (total, item) => total + item.quantity,
     0
@@ -62,12 +62,14 @@ const Navbar = () => {
             </form>
 
             {/* User */}
-            <Link
-              to="/login"
-              className="text-gray-700 hover:text-blue-600 transition-colors"
-            >
-              <User className="h-6 w-6" />
-            </Link>
+
+            {user ? (
+              <span className="font-semibold text-blue-600">{user.email}</span>
+            ) : (
+              <Link to="/login">
+                <User className="h-6 w-6" />
+              </Link>
+            )}
 
             {/* Cart */}
             <Link
