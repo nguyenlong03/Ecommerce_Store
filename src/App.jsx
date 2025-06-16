@@ -8,9 +8,9 @@ import CartPage from "./pages/CartPage";
 import CheckoutPage from "./pages/CheckoutPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import { CartProvider } from "./context/CartContext";
+import { CartProvider } from "@/context/CartContext";
 import { ToastContainer } from "react-toastify";
-import { AuthProvider } from "./context/AuthContext";
+import { AuthProvider } from "@/context/AuthConText";
 
 function App() {
   return (

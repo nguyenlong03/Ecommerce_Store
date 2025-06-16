@@ -24,7 +24,7 @@ const ProductCard = ({ product }) => {
         theme: "light",
       }
     );
-    login(email);
+
   };
 
   return (

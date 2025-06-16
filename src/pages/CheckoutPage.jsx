@@ -27,7 +27,7 @@ const CheckoutPage = () => {
   );
   
   const shipping = subtotal > 100 ? 0 : 10;
-  const tax = subtotal * 0.07; // 7% tax
+  const tax = subtotal * 0.07; 
   const total = subtotal + shipping + tax;
   
   const handleInputChange = (e) => {
