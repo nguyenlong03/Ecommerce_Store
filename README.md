@@ -40,5 +40,5 @@ https://ecommerce-store-six-dun.vercel.app/
 
 ### 1. Clone the repository
 
-git clone https://github.com/your-username/your-repo-name.git
+git clonegit@github.com:nguyenlong03/Ecommerce_Store.git
 npm run dev
