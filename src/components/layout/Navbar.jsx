@@ -48,6 +48,14 @@ const Navbar = () => {
     return location.pathname === path;
   };
 
+  // Scroll to top when clicking navigation links
+  const handleNavClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("username");
@@ -71,7 +79,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo với gradient - Responsive */}
           <div className="flex-shrink-0 flex items-center">
-            <Link to="/" className="group flex items-center space-x-2">
+            <Link to="/" onClick={handleNavClick} className="group flex items-center space-x-2">
               <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
                 <span className="text-white font-bold text-sm sm:text-lg">
                   S
@@ -98,6 +106,7 @@ const Navbar = () => {
               <Link
                 key={item.path}
                 to={item.path}
+                onClick={handleNavClick}
                 className={`relative px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
                   isActiveRoute(item.path)
                     ? "text-blue-600 bg-blue-50"
@@ -151,6 +160,7 @@ const Navbar = () => {
                   {isAdmin() && (
                     <Link
                       to="/admin"
+                      onClick={handleNavClick}
                       className="hidden xs:flex p-1 sm:p-2 text-gray-700 hover:text-blue-600 hover:bg-gray-50 rounded-lg transition-colors"
                       title="Admin Panel"
                     >
@@ -234,7 +244,10 @@ const Navbar = () => {
                 <Link
                   key={item.path}
                   to={item.path}
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => {
+                    setIsMenuOpen(false);
+                    handleNavClick();
+                  }}
                   className={`block px-3 py-2 rounded-md font-medium transition-colors ${
                     isActiveRoute(item.path)
                       ? "text-blue-600 bg-blue-50"
@@ -271,7 +284,10 @@ const Navbar = () => {
                     {isAdmin() && (
                       <Link
                         to="/admin"
-                        onClick={() => setIsMenuOpen(false)}
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          handleNavClick();
+                        }}
                         className="flex items-center space-x-2 p-3 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors mb-2"
                       >
                         <svg
