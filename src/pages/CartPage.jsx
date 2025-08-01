@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
 import {
   Minus,
   Plus,
@@ -10,11 +10,19 @@ import {
   CreditCard,
   Truck,
 } from "lucide-react";
-import { removeFromCart, updateCartQuantity, clearCart } from '../redux/actions';
+import {
+  removeFromCart,
+  updateCartQuantity,
+  clearCart,
+} from "../redux/actions";
 
 const CartPage = () => {
   const dispatch = useDispatch();
-  const { cartItems, totalItems, totalPrice } = useSelector(state => state.cart);
+  const {
+    items: cartItems,
+    totalItems,
+    totalPrice,
+  } = useSelector((state) => state.cart);
 
   const handleUpdateQuantity = (id, newQuantity) => {
     dispatch(updateCartQuantity(id, newQuantity));
@@ -36,7 +44,7 @@ const CartPage = () => {
 
   if (cartItems.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 py-12">
+      <div className="min-h-screen bg-gray-50 py-12 ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center py-16">
             <div className="mx-auto h-24 w-24 text-gray-300 mb-6">
@@ -62,15 +70,13 @@ const CartPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 mt-12">
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">
-                Giỏ hàng
-              </h1>
+              <h1 className="text-3xl font-bold text-gray-900">Giỏ hàng</h1>
               <p className="text-gray-600 mt-2">
                 {totalItems} sản phẩm trong giỏ hàng
               </p>
@@ -113,11 +119,15 @@ const CartPage = () => {
                     {/* Product Image */}
                     <div className="flex-shrink-0">
                       <img
-                        src={item.image || "https://via.placeholder.com/300x300?text=No+Image"}
+                        src={
+                          item.image ||
+                          "https://via.placeholder.com/300x300?text=No+Image"
+                        }
                         alt={item.name || item.title}
                         className="h-24 w-24 rounded-lg object-cover"
                         onError={(e) => {
-                          e.target.src = "https://via.placeholder.com/300x300?text=No+Image";
+                          e.target.src =
+                            "https://via.placeholder.com/300x300?text=No+Image";
                         }}
                       />
                     </div>
@@ -139,7 +149,9 @@ const CartPage = () => {
                     {/* Quantity Controls */}
                     <div className="flex items-center space-x-2">
                       <button
-                        onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
+                        onClick={() =>
+                          handleUpdateQuantity(item.id, item.quantity - 1)
+                        }
                         className="p-1 rounded-full border border-gray-300 hover:bg-gray-50 transition-colors"
                       >
                         <Minus className="h-4 w-4" />
@@ -148,7 +160,9 @@ const CartPage = () => {
                         {item.quantity}
                       </span>
                       <button
-                        onClick={() => handleUpdateQuantity(item.id, item.quantity + 1)}
+                        onClick={() =>
+                          handleUpdateQuantity(item.id, item.quantity + 1)
+                        }
                         className="p-1 rounded-full border border-gray-300 hover:bg-gray-50 transition-colors"
                       >
                         <Plus className="h-4 w-4" />
@@ -217,7 +231,8 @@ const CartPage = () => {
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
                     <p className="text-sm text-blue-700">
                       <Truck className="h-4 w-4 inline mr-1" />
-                      Mua thêm ${(100 - subtotal).toFixed(2)} để được miễn phí vận chuyển!
+                      Mua thêm ${(100 - subtotal).toFixed(2)} để được miễn phí
+                      vận chuyển!
                     </p>
                   </div>
                 )}

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 import {
   Star,
   ShoppingCart,
@@ -10,9 +12,11 @@ import {
 } from "lucide-react";
 
 import { getProductById } from "../api/Productjs";
+import { addToCart } from "../redux/actions";
 
 const ProductDetailPage = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -69,12 +73,29 @@ const ProductDetailPage = () => {
   }
 
   const handleAddToCart = () => {
-    dispatch(
-      addToCart({
-        ...product,
-        quantity,
-      })
-    );
+    console.log('handleAddToCart called', { product, quantity });
+    
+    if (!product) {
+      toast.error("Sản phẩm không hợp lệ");
+      return;
+    }
+
+    try {
+      const productToAdd = {
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        image: product.image,
+        category: product.category,
+        quantity: quantity
+      };
+
+      dispatch(addToCart(productToAdd));
+      toast.success(`Đã thêm "${product.title}" vào giỏ hàng!`);
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+      toast.error("Có lỗi khi thêm sản phẩm vào giỏ hàng");
+    }
   };
 
   // Use images from API response

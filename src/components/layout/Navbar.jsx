@@ -12,10 +12,10 @@ import {
 } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { logout, loginSuccess } from "../../redux/actions";
+import SearchDropdown from "../ui/SearchDropdown";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [isScrolled, setIsScrolled] = useState(false);
   const { totalItems } = useSelector((state) => state.cart);
   const { isAuthenticated, user } = useSelector((state) => state.auth);
@@ -43,11 +43,6 @@ const Navbar = () => {
       }
     }
   }, [isAuthenticated, dispatch]);
-
-  const handleSearch = (e) => {
-    e.preventDefault();
-    console.log("Searching for:", searchQuery);
-  };
 
   const isActiveRoute = (path) => {
     return location.pathname === path;
@@ -119,16 +114,7 @@ const Navbar = () => {
 
           {/* Search Bar */}
           <div className="hidden lg:flex items-center flex-1 max-w-md mx-8">
-            <form onSubmit={handleSearch} className="relative w-full">
-              <input
-                type="text"
-                placeholder="Tìm kiếm sản phẩm..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-gray-50 focus:bg-white transition-colors"
-              />
-              <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-            </form>
+            <SearchDropdown />
           </div>
 
           {/* Right side actions - Responsive */}
@@ -235,16 +221,7 @@ const Navbar = () => {
             <div className="px-2 pt-2 pb-3 space-y-1">
               {/* Mobile Search */}
               <div className="px-3 py-2">
-                <form onSubmit={handleSearch} className="relative">
-                  <input
-                    type="text"
-                    placeholder="Tìm kiếm..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
-                </form>
+                <SearchDropdown isMobile={true} />
               </div>
 
               {[

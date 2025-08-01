@@ -10,7 +10,7 @@ export const LOGOUT = 'LOGOUT';
 
 // Initial state
 const initialCartState = {
-  cartItems: [],
+  items: [], // Đổi từ cartItems thành items
   totalItems: 0,
   totalPrice: 0
 };
@@ -30,63 +30,102 @@ const calculateTotals = (items) => {
 
 // Cart Reducer
 export const cartReducer = (state = initialCartState, action) => {
+  // Ensure state has proper structure
+  const currentState = {
+    items: [],
+    totalItems: 0,
+    totalPrice: 0,
+    ...state
+  };
+
   switch (action.type) {
     case ADD_TO_CART: {
+      console.log('ADD_TO_CART reducer called with:', action.payload);
+      console.log('Current state:', currentState);
+      
       const { product, quantity = 1 } = action.payload;
-      const existingItem = state.cartItems.find(item => item.id === product.id);
+      
+      if (!product || !product.id) {
+        console.error('Invalid product data:', product);
+        return currentState;
+      }
+
+      // Ensure items array exists
+      const items = currentState.items || [];
+      const existingItem = items.find(item => item.id === product.id);
       
       let updatedItems;
       if (existingItem) {
         // Update quantity if item already exists
-        updatedItems = state.cartItems.map(item =>
+        updatedItems = items.map(item =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + quantity }
             : item
         );
       } else {
         // Add new item to cart
-        updatedItems = [...state.cartItems, { ...product, quantity }];
+        updatedItems = [...items, { ...product, quantity }];
       }
       
       const totals = calculateTotals(updatedItems);
+      console.log('Updated cart state:', { items: updatedItems, ...totals });
+      
       return {
-        ...state,
-        cartItems: updatedItems,
+        ...currentState,
+        items: updatedItems,
         ...totals
       };
     }
 
     case REMOVE_FROM_CART: {
-      const updatedItems = state.cartItems.filter(item => item.id !== action.payload.id);
+      // Ensure state has proper structure
+      const currentState = {
+        items: [],
+        totalItems: 0,
+        totalPrice: 0,
+        ...state
+      };
+      
+      const items = currentState.items || [];
+      const updatedItems = items.filter(item => item.id !== action.payload.id);
       const totals = calculateTotals(updatedItems);
       return {
-        ...state,
-        cartItems: updatedItems,
+        ...currentState,
+        items: updatedItems,
         ...totals
       };
     }
 
     case UPDATE_CART_QUANTITY: {
+      // Ensure state has proper structure
+      const currentState = {
+        items: [],
+        totalItems: 0,
+        totalPrice: 0,
+        ...state
+      };
+      
       const { id, quantity } = action.payload;
+      const items = currentState.items || [];
       
       if (quantity <= 0) {
         // Remove item if quantity is 0 or less
-        const updatedItems = state.cartItems.filter(item => item.id !== id);
+        const updatedItems = items.filter(item => item.id !== id);
         const totals = calculateTotals(updatedItems);
         return {
-          ...state,
-          cartItems: updatedItems,
+          ...currentState,
+          items: updatedItems,
           ...totals
         };
       }
       
-      const updatedItems = state.cartItems.map(item =>
+      const updatedItems = items.map(item =>
         item.id === id ? { ...item, quantity } : item
       );
       const totals = calculateTotals(updatedItems);
       return {
-        ...state,
-        cartItems: updatedItems,
+        ...currentState,
+        items: updatedItems,
         ...totals
       };
     }

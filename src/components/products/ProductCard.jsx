@@ -15,19 +15,31 @@ const ProductCard = ({ product }) => {
     e.stopPropagation();
     
     try {
-      dispatch(addToCart(product, 1));
+      const productToAdd = {
+        id: product.id,
+        title: product.title || product.name,
+        price: product.price,
+        image: product.image,
+        category: product.category,
+        quantity: 1
+      };
+
+      dispatch(addToCart(productToAdd));
+      
+      // Show success notification
       toast.success(
-        `${product.name || product.title} đã được thêm vào giỏ hàng!`,
+        `Đã thêm ${(product.name || product.title).substring(0, 30)}... vào giỏ hàng!`,
         {
           position: "top-right",
-          autoClose: 2000,
-          hideProgressBar: false,
+          autoClose: 1500,
+          hideProgressBar: true,
           closeOnClick: true,
-          pauseOnHover: true,
+          pauseOnHover: false,
           draggable: true,
         }
       );
     } catch (error) {
+      console.error('Error adding to cart:', error);
       toast.error(
         "Không thể thêm sản phẩm vào giỏ hàng",
         {

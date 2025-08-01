@@ -13,8 +13,9 @@ const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
 
-  // Get category from URL params
+  // Get category and search query from URL params
   const categoryFromUrl = searchParams.get("category");
+  const searchFromUrl = searchParams.get("search");
 
   // Fetch all products and extract categories
   useEffect(() => {
@@ -37,6 +38,11 @@ const ProductsPage = () => {
         setAllProducts(productsData);
         setFilteredProducts(productsData);
 
+        // Set search term from URL if present
+        if (searchFromUrl) {
+          setSearchTerm(searchFromUrl);
+        }
+
         // Extract unique categories from all products for filter
         const allProductsResponse = await getAllProducts();
         const allProductsData = allProductsResponse.data || allProductsResponse;
@@ -55,7 +61,7 @@ const ProductsPage = () => {
     };
 
     fetchProducts();
-  }, [categoryFromUrl]);
+  }, [categoryFromUrl, searchFromUrl]);
 
   // Handle search and filter
   useEffect(() => {
@@ -166,12 +172,17 @@ const ProductsPage = () => {
               </div>
             </div>
 
-            {/* Category breadcrumb */}
-            {categoryFromUrl && categoryFromUrl !== "all" && (
+            {/* Category/Search breadcrumb */}
+            {((categoryFromUrl && categoryFromUrl !== "all") || searchFromUrl) && (
               <div className="inline-flex items-center bg-white/20 backdrop-blur-sm rounded-full px-6 py-2 mb-4">
                 <Sparkles className="h-4 w-4 mr-2" />
                 <span className="text-sm font-medium">
-                  Danh mục: {getCategoryDisplayName(categoryFromUrl)}
+                  {categoryFromUrl && categoryFromUrl !== "all" && (
+                    <>Danh mục: {getCategoryDisplayName(categoryFromUrl)}</>
+                  )}
+                  {searchFromUrl && (
+                    <>Tìm kiếm: "{searchFromUrl}"</>
+                  )}
                 </span>
               </div>
             )}
@@ -182,6 +193,12 @@ const ProductsPage = () => {
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
                   Đang tải sản phẩm...
                 </span>
+              ) : searchFromUrl ? (
+                <>
+                  Kết quả tìm kiếm
+                  <br />
+                  <span className="text-2xl md:text-3xl">"{searchFromUrl}"</span>
+                </>
               ) : categoryFromUrl && categoryFromUrl !== "all" ? (
                 <>
                   {getCategoryDisplayName(categoryFromUrl)}
@@ -194,7 +211,9 @@ const ProductsPage = () => {
             </h1>
             <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
               {!loading &&
-                (categoryFromUrl && categoryFromUrl !== "all"
+                (searchFromUrl 
+                  ? `Tìm thấy ${filteredProducts.length} sản phẩm cho "${searchFromUrl}"`
+                  : categoryFromUrl && categoryFromUrl !== "all"
                   ? `Khám phá ${
                       allProducts.length
                     } sản phẩm trong danh mục ${getCategoryDisplayName(

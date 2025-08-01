@@ -1,10 +1,17 @@
 import { ADD_TO_CART, REMOVE_FROM_CART, UPDATE_CART_QUANTITY, CLEAR_CART, LOGIN_SUCCESS, LOGOUT } from './reducers';
 
 // Cart Action Creators
-export const addToCart = (product, quantity = 1) => ({
-  type: ADD_TO_CART,
-  payload: { product, quantity }
-});
+export const addToCart = (productData) => {
+  console.log('addToCart called with:', productData);
+  
+  // Tách quantity ra khỏi product data
+  const { quantity = 1, ...product } = productData;
+  
+  return {
+    type: ADD_TO_CART,
+    payload: { product, quantity }
+  };
+};
 
 export const removeFromCart = (id) => ({
   type: REMOVE_FROM_CART,

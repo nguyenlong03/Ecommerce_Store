@@ -7,13 +7,13 @@ const ContactPage = () => {
     name: "",
     email: "",
     subject: "",
-    message: ""
+    message: "",
   });
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
@@ -25,7 +25,7 @@ const ContactPage = () => {
       name: "",
       email: "",
       subject: "",
-      message: ""
+      message: "",
     });
   };
 
@@ -33,39 +33,32 @@ const ContactPage = () => {
     {
       icon: Mail,
       title: "Email",
-      details: "support@shoplongdev.com",
-      description: "Send us an email anytime"
+      details: "Nguyenlong@gmail.com",
+      description: "Gửi email cho chúng tôi bất cứ lúc nào",
     },
     {
       icon: Phone,
       title: "Phone",
-      details: "+1 (555) 123-4567",
-      description: "Mon-Fri from 8am to 5pm"
+      details: "097306439x",
+      description: "Thứ Hai - Thứ Sáu từ 8 giờ sáng đến 5 giờ chiều",
     },
     {
       icon: MapPin,
       title: "Office",
-      details: "123 Business St, Suite 100",
-      description: "New York, NY 10001"
+      details: "Hoàng Mai",
+      description: "Hà Nội, Việt Nam",
     },
-    {
-      icon: Clock,
-      title: "Business Hours",
-      details: "Monday - Friday",
-      description: "8:00 AM - 5:00 PM EST"
-    }
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 py-8 mt-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            Contact Us
-          </h1>
+          <h1 className="text-4xl font-bold text-gray-900 mb-4">Contact Us</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Have a question or need help? We're here to assist you. Get in touch with our friendly team.
+            Bạn có thắc mắc hoặc cần hỗ trợ? Chúng tôi luôn sẵn sàng hỗ trợ bạn.
+            Hãy liên hệ với đội ngũ thân thiện của chúng tôi.
           </p>
         </div>
 
@@ -79,7 +72,10 @@ const ContactPage = () => {
               <form onSubmit={handleSubmit} className="space-y-6">
                 <div className="grid md:grid-cols-2 gap-6">
                   <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="name"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Full Name
                     </label>
                     <input
@@ -94,7 +90,10 @@ const ContactPage = () => {
                     />
                   </div>
                   <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label
+                      htmlFor="email"
+                      className="block text-sm font-medium text-gray-700 mb-2"
+                    >
                       Email Address
                     </label>
                     <input
@@ -110,7 +109,10 @@ const ContactPage = () => {
                   </div>
                 </div>
                 <div>
-                  <label htmlFor="subject" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="subject"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Subject
                   </label>
                   <input
@@ -125,7 +127,10 @@ const ContactPage = () => {
                   />
                 </div>
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                  <label
+                    htmlFor="message"
+                    className="block text-sm font-medium text-gray-700 mb-2"
+                  >
                     Message
                   </label>
                   <textarea
@@ -165,9 +170,7 @@ const ContactPage = () => {
                     <p className="text-gray-900 font-medium mb-1">
                       {info.details}
                     </p>
-                    <p className="text-sm text-gray-600">
-                      {info.description}
-                    </p>
+                    <p className="text-sm text-gray-600">{info.description}</p>
                   </div>
                 </div>
               </div>
@@ -179,12 +182,10 @@ const ContactPage = () => {
                 Frequently Asked Questions
               </h3>
               <p className="text-gray-600 mb-4">
-                Check out our FAQ section for quick answers to common questions.
+                Hãy xem phần Câu hỏi thường gặp của chúng tôi để biết câu trả
+                lời nhanh cho những câu hỏi thường gặp.
               </p>
-              <a
-                href="#"
-                className="text-blue-600 font-medium hover:underline"
-              >
+              <a href="#" className="text-blue-600 font-medium hover:underline">
                 View FAQ →
               </a>
             </div>
@@ -195,12 +196,19 @@ const ContactPage = () => {
         <div className="mt-12">
           <div className="bg-white rounded-lg shadow-md p-8">
             <h2 className="text-2xl font-semibold text-gray-900 mb-6 text-center">
-              Visit Our Office
+              Direct support
             </h2>
             <div className="bg-gray-200 h-64 rounded-lg flex items-center justify-center">
-              <p className="text-gray-600">
-                Interactive map would be displayed here
-              </p>
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d119214.90984964781!2d105.77584254646258!3d20.973952094191425!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3135ac398657c2ad%3A0xe0a5e23eaaed780!2zSG_DoG5nIE1haSwgSMOgIE7hu5lpLCBWaeG7h3QgTmFt!5e0!3m2!1svi!2s!4v1754065529071!5m2!1svi!2s"
+                referrerpolicy="no-referrer-when-downgrade"
+                style={{
+                  border: 0,
+                  width: "100%",
+                  height: "100%",
+                  borderRadius: "0.5rem",
+                }}
+              ></iframe>
             </div>
           </div>
         </div>
