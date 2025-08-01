@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Search, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getAllProducts } from "../../api/Productjs";
+import { scrollToTop } from "../../hooks/useScrollToTop";
 
 const SearchDropdown = ({ isMobile = false }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -71,6 +72,7 @@ const SearchDropdown = ({ isMobile = false }) => {
   const handleSuggestionClick = () => {
     setSearchQuery("");
     setIsDropdownOpen(false);
+    scrollToTop();
   };
 
   const clearSearch = () => {

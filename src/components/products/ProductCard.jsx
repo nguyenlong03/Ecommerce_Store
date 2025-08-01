@@ -4,6 +4,7 @@ import { ShoppingCart, Heart, Eye, Star } from "lucide-react";
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../../redux/actions';
 import { toast } from 'react-toastify';
+import { scrollToTop } from '../../hooks/useScrollToTop';
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
@@ -60,6 +61,10 @@ const ProductCard = ({ product }) => {
     );
   };
 
+  const handleViewDetails = () => {
+    scrollToTop();
+  };
+
   return (
     <div className="group relative bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 card-hover">
       {/* Badge */}
@@ -81,7 +86,7 @@ const ProductCard = ({ product }) => {
         <Heart className={`h-5 w-5 ${isLiked ? 'fill-current' : ''}`} />
       </button>
 
-      <Link to={`/products/${product.id}`} className="block">
+      <Link to={`/products/${product.id}`} onClick={handleViewDetails} className="block">
         {/* Product Image */}
         <div className="relative overflow-hidden bg-gray-100 aspect-square">
           <img
@@ -113,6 +118,7 @@ const ProductCard = ({ product }) => {
               </button>
               <Link
                 to={`/products/${product.id}`}
+                onClick={handleViewDetails}
                 className="bg-white text-gray-900 p-3 rounded-full hover:bg-green-600 hover:text-white transition-all duration-300 transform hover:scale-110 shadow-lg"
               >
                 <Eye className="h-5 w-5" />

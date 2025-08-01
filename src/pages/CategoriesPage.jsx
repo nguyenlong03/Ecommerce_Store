@@ -17,6 +17,7 @@ import {
   getAllProducts,
   getProductsByCategory,
 } from "../api/Productjs";
+import { scrollToTop } from "../hooks/useScrollToTop";
 
 const CategoriesPage = () => {
   const [viewMode, setViewMode] = useState("grid");
@@ -513,6 +514,7 @@ const CategoriesPage = () => {
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Link
                   to="/products"
+                  onClick={scrollToTop}
                   className="inline-flex items-center bg-white text-blue-600 font-semibold px-8 py-4 rounded-full hover:bg-gray-100 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
                 >
                   <ShoppingBag className="h-5 w-5 mr-2" />
@@ -521,6 +523,7 @@ const CategoriesPage = () => {
 
                 <Link
                   to="/contact"
+                  onClick={scrollToTop}
                   className="inline-flex items-center border-2 border-white text-white font-semibold px-8 py-4 rounded-full hover:bg-white hover:text-blue-600 transition-all duration-300"
                 >
                   Liên hệ hỗ trợ

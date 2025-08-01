@@ -20,7 +20,9 @@ const ContactPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Simulate form submission
-    toast.success("Thank you for your message! We'll get back to you soon.");
+    toast.success(
+      "Cảm ơn bạn đã nhắn tin! Chúng tôi sẽ sớm liên hệ lại với bạn."
+    );
     setFormData({
       name: "",
       email: "",
