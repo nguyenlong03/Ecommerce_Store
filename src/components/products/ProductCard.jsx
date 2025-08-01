@@ -1,108 +1,180 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { ShoppingCart, Heart } from "lucide-react";
-import { useCart } from "../../context/CartContext";
-import { ToastContainer, toast } from "react-toastify";
+import { ShoppingCart, Heart, Eye, Star } from "lucide-react";
+import { useDispatch } from 'react-redux';
+import { addToCart } from '../../redux/actions';
+import { toast } from 'react-toastify';
 
 const ProductCard = ({ product }) => {
-  const { addToCart } = useCart();
+  const dispatch = useDispatch();
+  const [isLiked, setIsLiked] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleAddToCart = (e) => {
     e.preventDefault();
-    addToCart(product);
-    toast.success(
-      `Sản Phẩm ${product.name} đã được thêm vào giỏ hàng
-      `,
-      {
-        position: "top-right",
-        autoClose: 1000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      }
-    );
+    e.stopPropagation();
+    
+    try {
+      dispatch(addToCart(product, 1));
+      toast.success(
+        `${product.name || product.title} đã được thêm vào giỏ hàng!`,
+        {
+          position: "top-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+        }
+      );
+    } catch (error) {
+      toast.error(
+        "Không thể thêm sản phẩm vào giỏ hàng",
+        {
+          position: "top-right",
+          autoClose: 3000,
+        }
+      );
+    }
+  };
 
+  const handleLike = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsLiked(!isLiked);
+    toast.success(
+      isLiked ? "Đã xóa khỏi danh sách yêu thích" : "Đã thêm vào danh sách yêu thích",
+      { autoClose: 1000 }
+    );
   };
 
   return (
-    <div className="group relative bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300">
-      {/* Sale tag */}
-      {product.discount > 0 && (
-        <div className="absolute top-2 left-2 bg-rose-500 text-white text-xs font-bold px-2 py-1 rounded z-10">
-          {product.discount}% OFF
+    <div className="group relative bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 card-hover">
+      {/* Badge */}
+      {product.discount && (
+        <div className="absolute top-3 left-3 bg-gradient-to-r from-red-500 to-pink-500 text-white text-xs font-bold px-3 py-1 rounded-full z-10 animate-pulse">
+          -{product.discount}%
         </div>
       )}
 
       {/* Wishlist button */}
       <button
-        className="absolute top-2 right-2 bg-white rounded-full p-1.5 shadow-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"
-        onClick={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          // Handle wishlist functionality
-          console.log("Added to wishlist:", product.name);
-        }}
+        onClick={handleLike}
+        className={`absolute top-3 right-3 p-2 rounded-full transition-all duration-300 z-10 ${
+          isLiked 
+            ? 'bg-red-100 text-red-500 scale-110' 
+            : 'bg-white/80 text-gray-600 hover:bg-red-100 hover:text-red-500 opacity-0 group-hover:opacity-100'
+        } backdrop-blur-sm shadow-lg hover:scale-110`}
       >
-        <Heart className="h-5 w-5 text-gray-500 hover:text-rose-500" />
+        <Heart className={`h-5 w-5 ${isLiked ? 'fill-current' : ''}`} />
       </button>
 
-      {/* Product image */}
-      <Link
-        to={`/products/${product.id}`}
-        className="block overflow-hidden rounded-t-lg"
-      >
-        <img
-          src={product.image}
-          alt={product.name}
-          className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
-        />
-      </Link>
+      <Link to={`/products/${product.id}`} className="block">
+        {/* Product Image */}
+        <div className="relative overflow-hidden bg-gray-100 aspect-square">
+          <img
+            src={product.image || product.images?.[0] || "https://via.placeholder.com/400x400?text=No+Image"}
+            alt={product.name || product.title}
+            className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-110 ${
+              imageLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+            onLoad={() => setImageLoaded(true)}
+            onError={(e) => {
+              e.target.src = "https://via.placeholder.com/400x400?text=No+Image";
+            }}
+          />
+          
+          {!imageLoaded && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="loading-spinner"></div>
+            </div>
+          )}
 
-      {/* Product info */}
-      <div className="p-4">
-        <Link to={`/products/${product.id}`}>
-          <h3 className="text-lg font-medium text-gray-900 mb-1 hover:text-blue-600 transition-colors">
-            {product.name}
-          </h3>
-        </Link>
+          {/* Overlay with quick actions */}
+          <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+            <div className="flex space-x-3">
+              <button
+                onClick={handleAddToCart}
+                className="bg-white text-gray-900 p-3 rounded-full hover:bg-blue-600 hover:text-white transition-all duration-300 transform hover:scale-110 shadow-lg"
+              >
+                <ShoppingCart className="h-5 w-5" />
+              </button>
+              <Link
+                to={`/products/${product.id}`}
+                className="bg-white text-gray-900 p-3 rounded-full hover:bg-green-600 hover:text-white transition-all duration-300 transform hover:scale-110 shadow-lg"
+              >
+                <Eye className="h-5 w-5" />
+              </Link>
+            </div>
+          </div>
+        </div>
 
-        <p className="text-sm text-gray-500 mb-3 line-clamp-2">
-          {product.description}
-        </p>
-
-        <div className="flex items-center justify-between">
-          <div className="flex items-center">
-            {product.discount > 0 ? (
-              <>
-                <span className="text-lg font-bold text-gray-900">
-                  $
-                  {((product.price * (100 - product.discount)) / 100).toFixed(
-                    2
-                  )}
-                </span>
-                <span className="ml-2 text-sm text-gray-500 line-through">
-                  ${product.price.toFixed(2)}
-                </span>
-              </>
-            ) : (
-              <span className="text-lg font-bold text-gray-900">
-                ${product.price.toFixed(2)}
-              </span>
-            )}
+        {/* Product Info */}
+        <div className="p-6">
+          {/* Category */}
+          <div className="text-sm text-blue-600 font-medium mb-2 uppercase tracking-wide">
+            {product.category || "General"}
           </div>
 
-          <button
-            onClick={handleAddToCart}
-            className="flex items-center bg-blue-600 hover:bg-blue-700 text-white rounded-full p-2 transition-colors"
-            aria-label="Add to cart"
-          >
-            <ShoppingCart className="h-5 w-5" />
-          </button>
+          {/* Title */}
+          <h3 className="text-lg font-semibold text-gray-900 mb-2 line-clamp-2 group-hover:text-blue-600 transition-colors">
+            {product.name || product.title}
+          </h3>
+
+          {/* Rating */}
+          <div className="flex items-center mb-3">
+            <div className="flex items-center">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className={`h-4 w-4 ${
+                    i < Math.floor(product.rating?.rate || 4.5)
+                      ? 'text-yellow-400 fill-current'
+                      : 'text-gray-300'
+                  }`}
+                />
+              ))}
+            </div>
+            <span className="text-sm text-gray-600 ml-2">
+              ({product.rating?.count || 127})
+            </span>
+          </div>
+
+          {/* Description */}
+          <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+            {product.description}
+          </p>
+
+          {/* Price */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              {product.originalPrice && (
+                <span className="text-sm text-gray-400 line-through">
+                  ${product.originalPrice.toFixed(2)}
+                </span>
+              )}
+              <span className="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                ${product.price?.toFixed(2) || "0.00"}
+              </span>
+            </div>
+
+            {/* Add to cart button */}
+            <button
+              onClick={handleAddToCart}
+              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-3 rounded-full hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-110 shadow-lg hover:shadow-xl"
+            >
+              <ShoppingCart className="h-5 w-5" />
+            </button>
+          </div>
         </div>
-      </div>
+      </Link>
+
+      {/* Floating label for new products */}
+      {product.isNew && (
+        <div className="absolute bottom-4 left-4 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+          Mới
+        </div>
+      )}
     </div>
   );
 };
