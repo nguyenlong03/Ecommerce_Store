@@ -74,23 +74,25 @@ const CartPage = () => {
       {/* Header */}
       <div className="bg-white shadow-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
-              <h1 className="text-3xl font-bold text-gray-900">Giỏ hàng</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
+                Giỏ hàng
+              </h1>
               <p className="text-gray-600 mt-2">
                 {totalItems} sản phẩm trong giỏ hàng
               </p>
             </div>
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
               <button
                 onClick={handleClearCart}
-                className="text-red-600 hover:text-red-700 text-sm"
+                className="text-red-600 hover:text-red-700 text-sm order-2 sm:order-1"
               >
                 Xóa tất cả
               </button>
               <Link
                 to="/products"
-                className="inline-flex items-center text-blue-600 hover:text-blue-700"
+                className="inline-flex items-center text-blue-600 hover:text-blue-700 order-1 sm:order-2"
               >
                 <ArrowLeft className="h-5 w-5 mr-2" />
                 Tiếp tục mua sắm
@@ -112,74 +114,152 @@ const CartPage = () => {
               </div>
               <div className="divide-y">
                 {cartItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="p-6 flex items-center space-x-4"
-                  >
-                    {/* Product Image */}
-                    <div className="flex-shrink-0">
-                      <img
-                        src={
-                          item.image ||
-                          "https://via.placeholder.com/300x300?text=No+Image"
-                        }
-                        alt={item.name || item.title}
-                        className="h-24 w-24 rounded-lg object-cover"
-                        onError={(e) => {
-                          e.target.src =
-                            "https://via.placeholder.com/300x300?text=No+Image";
-                        }}
-                      />
-                    </div>
+                  <div key={item.id} className="p-4 sm:p-6">
+                    {/* Mobile Layout */}
+                    <div className="block sm:hidden">
+                      <div className="flex items-start space-x-4">
+                        {/* Product Image */}
+                        <div className="flex-shrink-0">
+                          <img
+                            src={
+                              item.image ||
+                              "https://via.placeholder.com/300x300?text=No+Image"
+                            }
+                            alt={item.name || item.title}
+                            className="h-20 w-20 rounded-lg object-cover"
+                            onError={(e) => {
+                              e.target.src =
+                                "https://via.placeholder.com/300x300?text=No+Image";
+                            }}
+                          />
+                        </div>
 
-                    {/* Product Details */}
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-lg font-medium text-gray-900 mb-1">
-                        {item.name || item.title}
-                      </h3>
-                      <div className="flex items-center space-x-4 text-sm text-gray-500 mb-2">
-                        <span>Danh mục: {item.category || "Tổng hợp"}</span>
-                        {item.brand && <span>Thương hiệu: {item.brand}</span>}
+                        {/* Product Info */}
+                        <div className="flex-1 min-w-0">
+                          <h3 className="text-base font-medium text-gray-900 mb-1 line-clamp-2">
+                            {item.name || item.title}
+                          </h3>
+                          <p className="text-sm text-gray-500 mb-2">
+                            {item.category || "Tổng hợp"}
+                          </p>
+                          <div className="flex items-center justify-between">
+                            <p className="text-lg font-semibold text-gray-900">
+                              ${item.price?.toFixed(2) || "0.00"}
+                            </p>
+                            <button
+                              onClick={() => handleRemoveItem(item.id)}
+                              className="text-red-500 hover:text-red-700 transition-colors p-1"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </div>
                       </div>
-                      <p className="text-lg font-semibold text-gray-900">
-                        ${item.price?.toFixed(2) || "0.00"}
-                      </p>
+
+                      {/* Quantity Controls and Total - Mobile */}
+                      <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
+                        <div className="flex items-center space-x-3">
+                          <span className="text-sm text-gray-600">
+                            Số lượng:
+                          </span>
+                          <div className="flex items-center space-x-2">
+                            <button
+                              onClick={() =>
+                                handleUpdateQuantity(item.id, item.quantity - 1)
+                              }
+                              className="p-1 rounded-full border border-gray-300 hover:bg-gray-50 transition-colors"
+                            >
+                              <Minus className="h-4 w-4" />
+                            </button>
+                            <span className="w-8 text-center text-base font-medium">
+                              {item.quantity}
+                            </span>
+                            <button
+                              onClick={() =>
+                                handleUpdateQuantity(item.id, item.quantity + 1)
+                              }
+                              className="p-1 rounded-full border border-gray-300 hover:bg-gray-50 transition-colors"
+                            >
+                              <Plus className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-base font-semibold text-gray-900">
+                            Tổng: $
+                            {((item.price || 0) * item.quantity).toFixed(2)}
+                          </p>
+                        </div>
+                      </div>
                     </div>
 
-                    {/* Quantity Controls */}
-                    <div className="flex items-center space-x-2">
-                      <button
-                        onClick={() =>
-                          handleUpdateQuantity(item.id, item.quantity - 1)
-                        }
-                        className="p-1 rounded-full border border-gray-300 hover:bg-gray-50 transition-colors"
-                      >
-                        <Minus className="h-4 w-4" />
-                      </button>
-                      <span className="w-12 text-center text-lg font-medium">
-                        {item.quantity}
-                      </span>
-                      <button
-                        onClick={() =>
-                          handleUpdateQuantity(item.id, item.quantity + 1)
-                        }
-                        className="p-1 rounded-full border border-gray-300 hover:bg-gray-50 transition-colors"
-                      >
-                        <Plus className="h-4 w-4" />
-                      </button>
-                    </div>
+                    {/* Desktop Layout */}
+                    <div className="hidden sm:flex items-center space-x-4">
+                      {/* Product Image */}
+                      <div className="flex-shrink-0">
+                        <img
+                          src={
+                            item.image ||
+                            "https://via.placeholder.com/300x300?text=No+Image"
+                          }
+                          alt={item.name || item.title}
+                          className="h-24 w-24 rounded-lg object-cover"
+                          onError={(e) => {
+                            e.target.src =
+                              "https://via.placeholder.com/300x300?text=No+Image";
+                          }}
+                        />
+                      </div>
 
-                    {/* Item Total */}
-                    <div className="text-right">
-                      <p className="text-lg font-semibold text-gray-900">
-                        ${((item.price || 0) * item.quantity).toFixed(2)}
-                      </p>
-                      <button
-                        onClick={() => handleRemoveItem(item.id)}
-                        className="text-red-500 hover:text-red-700 mt-2 transition-colors"
-                      >
-                        <Trash2 className="h-5 w-5" />
-                      </button>
+                      {/* Product Details */}
+                      <div className="flex-1 min-w-0">
+                        <h3 className="text-lg font-medium text-gray-900 mb-1">
+                          {item.name || item.title}
+                        </h3>
+                        <div className="flex items-center space-x-4 text-sm text-gray-500 mb-2">
+                          <span>Danh mục: {item.category || "Tổng hợp"}</span>
+                          {item.brand && <span>Thương hiệu: {item.brand}</span>}
+                        </div>
+                        <p className="text-lg font-semibold text-gray-900">
+                          ${item.price?.toFixed(2) || "0.00"}
+                        </p>
+                      </div>
+
+                      {/* Quantity Controls */}
+                      <div className="flex items-center space-x-2">
+                        <button
+                          onClick={() =>
+                            handleUpdateQuantity(item.id, item.quantity - 1)
+                          }
+                          className="p-1 rounded-full border border-gray-300 hover:bg-gray-50 transition-colors"
+                        >
+                          <Minus className="h-4 w-4" />
+                        </button>
+                        <span className="w-12 text-center text-lg font-medium">
+                          {item.quantity}
+                        </span>
+                        <button
+                          onClick={() =>
+                            handleUpdateQuantity(item.id, item.quantity + 1)
+                          }
+                          className="p-1 rounded-full border border-gray-300 hover:bg-gray-50 transition-colors"
+                        >
+                          <Plus className="h-4 w-4" />
+                        </button>
+                      </div>
+
+                      {/* Item Total */}
+                      <div className="text-right">
+                        <p className="text-lg font-semibold text-gray-900">
+                          ${((item.price || 0) * item.quantity).toFixed(2)}
+                        </p>
+                        <button
+                          onClick={() => handleRemoveItem(item.id)}
+                          className="text-red-500 hover:text-red-700 mt-2 transition-colors"
+                        >
+                          <Trash2 className="h-5 w-5" />
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -189,20 +269,20 @@ const CartPage = () => {
 
           {/* Order Summary */}
           <div className="lg:col-span-1">
-            <div className="bg-white rounded-lg shadow-sm border sticky top-8">
-              <div className="p-6 border-b">
+            <div className="bg-white rounded-lg shadow-sm border lg:sticky lg:top-8">
+              <div className="p-4 sm:p-6 border-b">
                 <h2 className="text-lg font-semibold text-gray-900">
                   Tóm tắt đơn hàng
                 </h2>
               </div>
 
-              <div className="p-6 space-y-4">
-                <div className="flex justify-between">
+              <div className="p-4 sm:p-6 space-y-4">
+                <div className="flex justify-between text-sm sm:text-base">
                   <span className="text-gray-600">Tạm tính</span>
                   <span className="font-medium">${subtotal.toFixed(2)}</span>
                 </div>
 
-                <div className="flex justify-between">
+                <div className="flex justify-between text-sm sm:text-base">
                   <span className="text-gray-600">Phí vận chuyển</span>
                   <span className="font-medium">
                     {shipping === 0 ? (
@@ -213,13 +293,13 @@ const CartPage = () => {
                   </span>
                 </div>
 
-                <div className="flex justify-between">
+                <div className="flex justify-between text-sm sm:text-base">
                   <span className="text-gray-600">Thuế</span>
                   <span className="font-medium">${tax.toFixed(2)}</span>
                 </div>
 
                 <div className="border-t pt-4">
-                  <div className="flex justify-between">
+                  <div className="flex justify-between text-base sm:text-lg">
                     <span className="text-lg font-semibold">Tổng cộng</span>
                     <span className="text-lg font-semibold text-blue-600">
                       ${total.toFixed(2)}
@@ -229,7 +309,7 @@ const CartPage = () => {
 
                 {shipping > 0 && (
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-                    <p className="text-sm text-blue-700">
+                    <p className="text-xs sm:text-sm text-blue-700">
                       <Truck className="h-4 w-4 inline mr-1" />
                       Mua thêm ${(100 - subtotal).toFixed(2)} để được miễn phí
                       vận chuyển!
@@ -239,7 +319,7 @@ const CartPage = () => {
 
                 <Link
                   to="/checkout"
-                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center"
+                  className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center text-base font-medium"
                 >
                   <CreditCard className="h-5 w-5 mr-2" />
                   Thanh toán
@@ -257,32 +337,32 @@ const CartPage = () => {
             </div>
 
             {/* Trust Badges */}
-            <div className="mt-6 bg-white rounded-lg shadow-sm border p-6">
-              <h3 className="font-semibold text-gray-900 mb-4">
+            <div className="mt-6 bg-white rounded-lg shadow-sm border p-4 sm:p-6">
+              <h3 className="font-semibold text-gray-900 mb-4 text-sm sm:text-base">
                 Tại sao chọn chúng tôi?
               </h3>
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
-                  <div className="bg-green-100 rounded-full p-2">
+                  <div className="bg-green-100 rounded-full p-2 flex-shrink-0">
                     <Truck className="h-4 w-4 text-green-600" />
                   </div>
-                  <span className="text-sm text-gray-600">
+                  <span className="text-xs sm:text-sm text-gray-600">
                     Miễn phí vận chuyển đơn hàng trên $100
                   </span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <div className="bg-blue-100 rounded-full p-2">
+                  <div className="bg-blue-100 rounded-full p-2 flex-shrink-0">
                     <CreditCard className="h-4 w-4 text-blue-600" />
                   </div>
-                  <span className="text-sm text-gray-600">
+                  <span className="text-xs sm:text-sm text-gray-600">
                     Thanh toán an toàn
                   </span>
                 </div>
                 <div className="flex items-center space-x-3">
-                  <div className="bg-purple-100 rounded-full p-2">
+                  <div className="bg-purple-100 rounded-full p-2 flex-shrink-0">
                     <ShoppingCart className="h-4 w-4 text-purple-600" />
                   </div>
-                  <span className="text-sm text-gray-600">
+                  <span className="text-xs sm:text-sm text-gray-600">
                     Chính sách đổi trả 30 ngày
                   </span>
                 </div>

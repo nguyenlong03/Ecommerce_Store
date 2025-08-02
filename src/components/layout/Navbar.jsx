@@ -39,7 +39,17 @@ const Navbar = () => {
       // For now, we'll just assume the token is valid if it exists
       const storedUsername = localStorage.getItem("username");
       if (storedUsername) {
-        dispatch(loginSuccess({ username: storedUsername }, token));
+        // Create same user ID format as in login
+        let userId;
+        if (storedUsername === "admin") {
+          userId = "admin";
+        } else {
+          userId =
+            storedUsername.toLowerCase() +
+            "_" +
+            btoa(storedUsername).slice(0, 8);
+        }
+        dispatch(loginSuccess({ id: userId, username: storedUsername }, token));
       }
     }
   }, [isAuthenticated, dispatch]);
@@ -52,13 +62,16 @@ const Navbar = () => {
   const handleNavClick = () => {
     window.scrollTo({
       top: 0,
-      behavior: 'smooth'
+      behavior: "smooth",
     });
   };
 
   const handleLogout = () => {
+    // Don't remove user's cart data - keep it for when they login again
+    // Only remove authentication tokens
     localStorage.removeItem("token");
     localStorage.removeItem("username");
+    localStorage.removeItem("authState");
     dispatch(logout());
   };
 
@@ -79,7 +92,11 @@ const Navbar = () => {
         <div className="flex justify-between items-center h-16">
           {/* Logo với gradient - Responsive */}
           <div className="flex-shrink-0 flex items-center">
-            <Link to="/" onClick={handleNavClick} className="group flex items-center space-x-2">
+            <Link
+              to="/"
+              onClick={handleNavClick}
+              className="group flex items-center space-x-2"
+            >
               <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-xl transition-shadow">
                 <span className="text-white font-bold text-sm sm:text-lg">
                   S

@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { getAllUsers, deleteUser } from "../../api/Users";
 import { toast } from "react-toastify";
+import { data } from "autoprefixer";
 
 const UsersList = ({ onEdit, onView, onAdd }) => {
   const [users, setUsers] = useState([]);
@@ -56,6 +57,7 @@ const UsersList = ({ onEdit, onView, onAdd }) => {
     try {
       setLoading(true);
       const usersData = await getAllUsers();
+      console.log("check uselisst", usersData);
       setUsers(usersData || []);
     } catch (error) {
       console.error("Error fetching users:", error);

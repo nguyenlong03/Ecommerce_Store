@@ -14,7 +14,7 @@ const LoginPage = () => {
   const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -23,10 +23,10 @@ const LoginPage = () => {
         const adminToken = "admin-token-" + Date.now();
         localStorage.setItem("token", adminToken);
         localStorage.setItem("username", username);
-        
-        // Dispatch login success action with admin user info
-        dispatch(loginSuccess({ username }, adminToken));
-        
+
+        // Dispatch login success action with admin user info (with unique ID)
+        dispatch(loginSuccess({ id: "admin", username }, adminToken));
+
         toast.success("Admin login successful!");
         navigate("/admin");
         return;
@@ -39,10 +39,14 @@ const LoginPage = () => {
         const token = response.token;
         localStorage.setItem("token", token);
         localStorage.setItem("username", username);
-        
-        // Dispatch login success action with user info
-        dispatch(loginSuccess({ username }, token));
-        
+
+        // Create unique user ID based on username (you can use a better ID system)
+        const userId =
+          username.toLowerCase() + "_" + btoa(username).slice(0, 8);
+
+        // Dispatch login success action with user info including unique ID
+        dispatch(loginSuccess({ id: userId, username }, token));
+
         toast.success("Login successful!");
         navigate("/");
       }

@@ -7,6 +7,7 @@ export const CLEAR_CART = 'CLEAR_CART';
 // Auth Actions
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGOUT = 'LOGOUT';
+export const LOAD_USER_CART = 'LOAD_USER_CART';
 
 // Initial state
 const initialCartState = {
@@ -52,10 +53,18 @@ export const cartReducer = (state = initialCartState, action) => {
 
       // Ensure items array exists
       const items = currentState.items || [];
+      
+      // Option 1: Always add as new item (no quantity increase)
+      // const updatedItems = [...items, { ...product, quantity }];
+      
+      // Option 2: Standard cart behavior (increase quantity if exists)
       const existingItem = items.find(item => item.id === product.id);
+      
+      console.log(`Looking for existing item with ID ${product.id}:`, existingItem);
       
       let updatedItems;
       if (existingItem) {
+        console.log(`Product already exists! Current quantity: ${existingItem.quantity}, adding: ${quantity}`);
         // Update quantity if item already exists
         updatedItems = items.map(item =>
           item.id === product.id
@@ -63,6 +72,7 @@ export const cartReducer = (state = initialCartState, action) => {
             : item
         );
       } else {
+        console.log('Product is new, adding to cart');
         // Add new item to cart
         updatedItems = [...items, { ...product, quantity }];
       }
@@ -132,6 +142,18 @@ export const cartReducer = (state = initialCartState, action) => {
 
     case CLEAR_CART:
       return initialCartState;
+
+    case LOAD_USER_CART: {
+      const userCart = action.payload;
+      console.log('LOAD_USER_CART reducer called with:', userCart);
+      const newState = {
+        items: userCart.items || [],
+        totalItems: userCart.totalItems || 0,
+        totalPrice: userCart.totalPrice || 0
+      };
+      console.log('New cart state after loading:', newState);
+      return newState;
+    }
 
     default:
       return state;

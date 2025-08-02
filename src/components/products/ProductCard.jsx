@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { ShoppingCart, Heart, Eye, Star } from "lucide-react";
-import { useDispatch } from 'react-redux';
-import { addToCart } from '../../redux/actions';
-import { toast } from 'react-toastify';
-import { scrollToTop } from '../../hooks/useScrollToTop';
+import { useDispatch } from "react-redux";
+import { addToCart } from "../../redux/actions";
+import { toast } from "react-toastify";
+import { scrollToTop } from "../../hooks/useScrollToTop";
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
@@ -14,7 +14,7 @@ const ProductCard = ({ product }) => {
   const handleAddToCart = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     try {
       const productToAdd = {
         id: product.id,
@@ -22,32 +22,36 @@ const ProductCard = ({ product }) => {
         price: product.price,
         image: product.image,
         category: product.category,
-        quantity: 1
+        quantity: 1,
       };
 
       dispatch(addToCart(productToAdd));
-      
-      // Show success notification
-      toast.success(
-        `Đã thêm ${(product.name || product.title).substring(0, 30)}... vào giỏ hàng!`,
-        {
-          position: "top-right",
-          autoClose: 1500,
-          hideProgressBar: true,
-          closeOnClick: true,
-          pauseOnHover: false,
-          draggable: true,
-        }
-      );
+
+      // Show success notification with unique toastId to prevent duplicates
+      const toastId = `add-cart-${product.id}-${Date.now()}`;
+      if (!toast.isActive(toastId)) {
+        toast.success(
+          `Đã thêm ${(product.name || product.title).substring(
+            0,
+            30
+          )}... vào giỏ hàng!`,
+          {
+            toastId: toastId,
+            position: "top-right",
+            autoClose: 1500,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: false,
+            draggable: true,
+          }
+        );
+      }
     } catch (error) {
-      console.error('Error adding to cart:', error);
-      toast.error(
-        "Không thể thêm sản phẩm vào giỏ hàng",
-        {
-          position: "top-right",
-          autoClose: 3000,
-        }
-      );
+      console.error("Error adding to cart:", error);
+      toast.error("Không thể thêm sản phẩm vào giỏ hàng", {
+        position: "top-right",
+        autoClose: 3000,
+      });
     }
   };
 
@@ -56,7 +60,9 @@ const ProductCard = ({ product }) => {
     e.stopPropagation();
     setIsLiked(!isLiked);
     toast.success(
-      isLiked ? "Đã xóa khỏi danh sách yêu thích" : "Đã thêm vào danh sách yêu thích",
+      isLiked
+        ? "Đã xóa khỏi danh sách yêu thích"
+        : "Đã thêm vào danh sách yêu thích",
       { autoClose: 1000 }
     );
   };
@@ -78,29 +84,38 @@ const ProductCard = ({ product }) => {
       <button
         onClick={handleLike}
         className={`absolute top-3 right-3 p-2 rounded-full transition-all duration-300 z-10 ${
-          isLiked 
-            ? 'bg-red-100 text-red-500 scale-110' 
-            : 'bg-white/80 text-gray-600 hover:bg-red-100 hover:text-red-500 opacity-0 group-hover:opacity-100'
+          isLiked
+            ? "bg-red-100 text-red-500 scale-110"
+            : "bg-white/80 text-gray-600 hover:bg-red-100 hover:text-red-500 opacity-0 group-hover:opacity-100"
         } backdrop-blur-sm shadow-lg hover:scale-110`}
       >
-        <Heart className={`h-5 w-5 ${isLiked ? 'fill-current' : ''}`} />
+        <Heart className={`h-5 w-5 ${isLiked ? "fill-current" : ""}`} />
       </button>
 
-      <Link to={`/products/${product.id}`} onClick={handleViewDetails} className="block">
+      <Link
+        to={`/products/${product.id}`}
+        onClick={handleViewDetails}
+        className="block"
+      >
         {/* Product Image */}
         <div className="relative overflow-hidden bg-gray-100 aspect-square">
           <img
-            src={product.image || product.images?.[0] || "https://via.placeholder.com/400x400?text=No+Image"}
+            src={
+              product.image ||
+              product.images?.[0] ||
+              "https://via.placeholder.com/400x400?text=No+Image"
+            }
             alt={product.name || product.title}
             className={`w-full h-full object-cover transition-all duration-700 group-hover:scale-110 ${
-              imageLoaded ? 'opacity-100' : 'opacity-0'
+              imageLoaded ? "opacity-100" : "opacity-0"
             }`}
             onLoad={() => setImageLoaded(true)}
             onError={(e) => {
-              e.target.src = "https://via.placeholder.com/400x400?text=No+Image";
+              e.target.src =
+                "https://via.placeholder.com/400x400?text=No+Image";
             }}
           />
-          
+
           {!imageLoaded && (
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="loading-spinner"></div>
@@ -147,8 +162,8 @@ const ProductCard = ({ product }) => {
                   key={i}
                   className={`h-4 w-4 ${
                     i < Math.floor(product.rating?.rate || 4.5)
-                      ? 'text-yellow-400 fill-current'
-                      : 'text-gray-300'
+                      ? "text-yellow-400 fill-current"
+                      : "text-gray-300"
                   }`}
                 />
               ))}
